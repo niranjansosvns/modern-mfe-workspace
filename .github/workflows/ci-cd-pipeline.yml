@@ -12,26 +12,32 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Pull down the code repository from Git
     - name: Checkout Repository
       uses: actions/checkout@v4
 
+    # 2. Setup Native Node.js 24 environment to prevent deprecation failures
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 20 # Fixed property key name here
+        node-version: 24 # Upgraded to match the active GitHub Runner standard
         cache: 'npm'
 
+    # 3. Clean install all package dependencies
     - name: Install Dependencies
       run: npm ci
 
+    # 4. Build the Shared TypeScript Asset Library First
     - name: Compile Shared Assets Library
       run: npm run build:shared
 
+    # 5. Build Your Shell Container and Micro-Frontend Applications
     - name: Compile Shell & Profile Production Apps
       run: |
         npm run build:shell
         npm run build:profile
 
+    # 6. Verify nested browser folder assets exist matching ngx-build-plus output rules
     - name: Verify Dist Folders Output
       run: |
         ls -la dist/shell/browser
@@ -49,6 +55,7 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    # Validate your Dockerfile setups compile properly with zero errors
     - name: Validate Shell Docker Build
       uses: docker/build-push-action@v5
       with:
