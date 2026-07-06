@@ -1,6 +1,5 @@
 name: Angular Micro-Frontend CI/CD Pipeline
 
-# Controls when the workflow will run
 on:
   push:
     branches: [ "main" ]
@@ -13,32 +12,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Pull down the code repository from Git
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # 2. Setup Node.js in the runner environment
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-node-version: 20
-        cache: 'npm' # Automatically caches node_modules for ultra-fast subsequent pipeline runs
+        node-version: 20 # Fixed property key name here
+        cache: 'npm'
 
-    # 3. Clean install all npm package dependencies
     - name: Install Dependencies
       run: npm ci
 
-    # 4. Build the Shared TypeScript Asset Library First
     - name: Compile Shared Assets Library
       run: npm run build:shared
 
-    # 5. Build Your Shell Container and Micro-Frontend Production Applications
     - name: Compile Shell & Profile Production Apps
       run: |
         npm run build:shell
         npm run build:profile
 
-    # 6. Optional Validation: Ensure production folders exist before moving to Docker stage
     - name: Verify Dist Folders Output
       run: |
         ls -la dist/shell/browser
@@ -46,27 +39,24 @@ jobs:
 
   build-docker-containers:
     name: Build & Verify Nginx Docker Images
-    needs: build-and-test # Only runs if the previous code compilation checks pass perfectly
+    needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    # Set up Docker Buildx helper layer
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    # Build the Shell Container Image to verify Docker syntax integrity
     - name: Validate Shell Docker Build
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile.shell
-        push: false # Set to true later once you link a DockerHub/AWS registry login step
+        push: false
         tags: angular-mfe-shell:latest
 
-    # Build the Remote MFE Container Image
     - name: Validate Remote Profile MFE Docker Build
       uses: docker/build-push-action@v5
       with:
@@ -74,4 +64,3 @@ jobs:
         file: ./Dockerfile.profile
         push: false
         tags: angular-profile-mfe:latest
-
