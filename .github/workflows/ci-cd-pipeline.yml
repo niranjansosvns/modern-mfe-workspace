@@ -37,11 +37,11 @@ jobs:
         npm run build:shell
         npm run build:profile
 
-    # 6. Verify nested browser folder assets exist matching ngx-build-plus output rules
+   # 6. Verify production folder assets exist matching your actual build outputs
     - name: Verify Dist Folders Output
       run: |
-        ls -la dist/shell/browser
-        ls -la dist/profile-mfe/browser
+        ls -la dist/shell
+        ls -la dist/profile-mfe
 
   build-docker-containers:
     name: Build & Verify Nginx Docker Images
