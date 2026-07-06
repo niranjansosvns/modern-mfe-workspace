@@ -1,7 +1,12 @@
 <nav class="main-navbar">
   <div class="logo">MicroFrontend Workspace</div>
-  <input type="text" [value]="username()" (input)="changeName($event)" placeholder="Change user token..." style="padding: 4px 8px; border-radius: 4px;" />
-  <ul class="nav-links">
+ <input 
+    type="text" 
+    [value]="username()" 
+    (input)="changeName($event)" 
+    placeholder="Change user token..." 
+    class="px-3 py-1 text-sm bg-white text-slate-900 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-400 placeholder-slate-400 w-48"
+  />  <ul class="nav-links">
     <!-- Links point to your standalone route configuration configurations -->
     <li><a routerLink="/">Home (Shell)</a></li>
     <li><a routerLink="/profile">User Profile (Remote MFE)</a></li>
