@@ -1,0 +1,11 @@
+<p>profile-card works!</p>
+<div style="border: 2px dashed #38bdf8; padding: 20px; border-radius: 8px;">
+      <h3>Profile Dashboard (Remote Component)</h3>
+      <p>Active Session User: <strong>{{ userService.currentUser() }}</strong></p>
+      <!-- Using the shared UI button -->
+      <lib-shared-button 
+        label="Reset Guest Name" 
+        color="#ef4444" 
+        (btnClick)="resetUser()">
+      </lib-shared-button>
+    </div>

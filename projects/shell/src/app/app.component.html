@@ -1,0 +1,14 @@
+<nav class="main-navbar">
+  <div class="logo">MicroFrontend Workspace</div>
+  <input type="text" [value]="username()" (input)="changeName($event)" placeholder="Change user token..." style="padding: 4px 8px; border-radius: 4px;" />
+  <ul class="nav-links">
+    <!-- Links point to your standalone route configuration configurations -->
+    <li><a routerLink="/">Home (Shell)</a></li>
+    <li><a routerLink="/profile">User Profile (Remote MFE)</a></li>
+  </ul>
+</nav>
+
+<!-- The router-outlet dynamically injects the federated apps right here -->
+<main class="content-viewport">
+  <router-outlet></router-outlet>
+</main>
