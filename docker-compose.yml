@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  shell-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.shell
+    ports:
+      - "8080:80" # Map Nginx port 80 out to 8080
+    depends_on:
+      - profile-mfe
+
+  profile-mfe:
+    build:
+      context: .
+      dockerfile: Dockerfile.profile
+    ports:
+      - "8081:80" # Map Nginx port 80 out to 8081
+
