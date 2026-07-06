@@ -10,4 +10,5 @@ module.exports = withModuleFederationPlugin({
     ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
     'shared-assets': { singleton: true, import: 'shared-assets' }
   },
+  
 });
