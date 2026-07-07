@@ -1,12 +1,26 @@
 <nav class="main-navbar">
+  <div class="flex items-center gap-4">
   <div class="logo">MicroFrontend Workspace</div>
+<div class="logo">MFE State: {{ username() }}</div>
+    
+    <!-- Conditional Tailwind CSS loading indicator -->
+    @if (userService.isNetworkLoading()) {
+      <div class="flex items-center gap-2 text-sky-400 font-semibold animate-pulse text-xs">
+        <div class="w-2 h-2 bg-sky-400 rounded-full animate-ping"></div>
+        Syncing Cloud Stream...
+      </div>
+    }
+  </div>
+  
  <input 
     type="text" 
     [value]="username()" 
     (input)="changeName($event)" 
     placeholder="Change user token..." 
     class="px-3 py-1 text-sm bg-white text-slate-900 border border-slate-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-400 placeholder-slate-400 w-48"
-  />  <ul class="nav-links">
+  /> 
+  
+  <ul class="nav-links">
     <!-- Links point to your standalone route configuration configurations -->
     <li><a routerLink="/">Home (Shell)</a></li>
     <li><a routerLink="/profile">User Profile (Remote MFE)</a></li>

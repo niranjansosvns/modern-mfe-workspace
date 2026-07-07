@@ -13,7 +13,7 @@ import { UserStateService } from 'shared-assets';
 })
 export class AppComponent {
   title = 'shell';
-  private userService = inject(UserStateService);
+  public userService = inject(UserStateService);
   // Expose the current value to the template
   public username = this.userService.currentUser;
 
