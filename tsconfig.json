@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "rootDir": "./projects",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -14,9 +15,9 @@
     "moduleResolution": "bundler",
     "paths": {
       "shared-assets": [
-        "./dist/shared-assets",
-        "./projects/shared-assets/src/public-api.ts"
-         ]
+        "./projects/shared-assets/src/public-api.ts",
+        "./dist/shared-assets"
+      ]
     },
     "importHelpers": true,
     "target": "ES2022",

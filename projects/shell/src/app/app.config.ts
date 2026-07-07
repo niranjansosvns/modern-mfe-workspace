@@ -1,16 +1,16 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { jwtLoggingInterceptor } from './core/jwt-logging.interceptor';
-import { provideHttpClient , withInterceptors} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http'; // Import HTTP Providers
+import { jwtLoggingInterceptor } from './core/jwt-logging.interceptor'; // Import your interceptor
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(withInterceptors([jwtLoggingInterceptor])),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideClientHydration(withEventReplay())
+    // Provide HttpClient globally and register your functional interceptor array
+    provideHttpClient(
+      withInterceptors([jwtLoggingInterceptor])
+    )
   ]
 };

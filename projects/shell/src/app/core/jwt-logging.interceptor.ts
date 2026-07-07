@@ -1,33 +1,36 @@
-import { HttpInterceptorFn , HttpHandlerFn, HttpRequest} from '@angular/common/http';
+import { HttpInterceptorFn, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { UserStateService } from 'shared-assets';
-import { finalize, tap } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
-export const jwtLoggingInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
+export const jwtLoggingInterceptor: HttpInterceptorFn = (
+  req: HttpRequest<unknown>, 
+  next: HttpHandlerFn
+) => {
   const userState = inject(UserStateService);
-  userState.setLoading(true); // Set loading state to true when request starts
-  const authToken = userState.authToken();
+
+  // 1. Turn on the global loading spinner state
+  userState.setLoading(true);
+
+  // 2. Fetch the active token string safely from memory
+  const token = userState.authToken();
+
+  // 3. Clone the request and inject Authorization Headers dynamically
   let modifiedReq = req;
-  if (authToken) {
+  if (token) {
     modifiedReq = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${authToken}`
+        Authorization: `Bearer ${token}`
       }
     });
-    console.log(`JWT Logging Interceptor: Added Authorization header with token: ${authToken}`);
+    console.log(`[Interceptor] Injected JWT Token into outgoing call: ${req.url}`);
   }
+
+  // 4. Pass the modified request down the pipeline and turn off loading when finished
   return next(modifiedReq).pipe(
-    tap({
-      next: (event) => {
-        console.log('JWT Logging Interceptor: Request successful', event);
-      },
-      error: (error) => {
-        console.error('JWT Logging Interceptor: Request failed', error);
-      }
-    }),
     finalize(() => {
-      userState.setLoading(false); // Reset loading state when request completes
-      console.log('JWT Logging Interceptor: Request completed');
+      userState.setLoading(false);
+      console.log(`[Interceptor] Network operation finalized for: ${req.url}`);
     })
-  );  
+  );
 };
