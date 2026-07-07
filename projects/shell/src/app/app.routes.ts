@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 import { environment } from '../environments/environment';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,7 @@ export const routes: Routes = [
   {
     path: 'profile',
     // Directly supply the precise production port endpoint link
+    canActivate: [authGuard],
     loadChildren: () => 
       loadRemoteModule({
         type: 'module',
