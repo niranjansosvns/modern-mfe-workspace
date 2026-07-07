@@ -1,12 +1,22 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { pluck } from 'shared-assets'; // Import our generic pluck utility
+import { pluck } from 'shared-assets'; // Import our custom generic pluck utility
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 export interface UserProfile {
-  username: string;
+  id: number;
+  firstName: string;
+  lastName: string;
   email: string;
-  roles: string[];
+}
+
+// Maps the structural API envelope payload wrapper returning from dummyjson.com
+export interface DummyJsonUsersResponse {
+  users: UserProfile[];
+  total: number;
+  skip: number;
+  limit: number;
 }
 
 @Injectable({
@@ -15,10 +25,12 @@ export interface UserProfile {
 export class ProfileService {
   private http = inject(HttpClient);
 
-  // Example method fetching user objects and mapping them strictly to a string array of emails
-  getEmailDropdownList() {
-    return this.http.get<UserProfile[]>('https://typicode.com').pipe(
-      map(users => pluck(users, 'email')) 
+  getEmailDropdownList(): Observable<string[]> {
+    return this.http.get<DummyJsonUsersResponse>('https://dummyjson.com/users').pipe(
+      // Step A: Extract the clean array property out of the envelope payload wrapper
+      map(response => response.users),
+      // Step B: Apply our type-safe pluck utility directly onto the extracted array
+      map(usersArray => pluck(usersArray, 'email'))
     );
   }
 }
